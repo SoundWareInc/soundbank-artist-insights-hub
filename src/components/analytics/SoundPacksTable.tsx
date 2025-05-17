@@ -1,3 +1,4 @@
+
 import { useState, useMemo } from "react";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { format } from "date-fns";
@@ -39,8 +40,8 @@ export const SoundPacksTable = ({ searchQuery, dateRange }: SoundPacksTableProps
     
     // Generate 50 sound packs with varied data
     return Array.from({ length: 50 }, (_, i) => {
-      // Randomize release date in the last 3 years
-      const daysAgo = Math.floor(Math.random() * 1095);
+      // Randomize release date within the last 30 days
+      const daysAgo = Math.floor(Math.random() * 29) + 1; // 1 to 30 days ago
       const releaseDate = new Date();
       releaseDate.setDate(releaseDate.getDate() - daysAgo);
       
@@ -52,10 +53,9 @@ export const SoundPacksTable = ({ searchQuery, dateRange }: SoundPacksTableProps
       // Generate number of sounds in the pack (between 8 and 128)
       const soundCount = Math.floor(Math.random() * 120) + 8;
       
-      // Calculate a base popularity factor (older packs may have had more time to accumulate metrics)
-      const ageFactor = Math.max(0.4, Math.min(1.5, (1095 - daysAgo) / 500));
+      // Calculate a base popularity factor
       const popularityBase = Math.random() * 0.7 + 0.3; // 0.3 to 1.0 base popularity
-      const popularity = popularityBase * ageFactor;
+      const popularity = popularityBase;
       
       // Generate metrics based on popularity and size of pack
       const packSizeFactor = Math.sqrt(soundCount / 40); // Adjust metrics based on pack size

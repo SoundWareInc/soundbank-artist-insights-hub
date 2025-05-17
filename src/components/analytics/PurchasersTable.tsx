@@ -1,3 +1,4 @@
+
 import { useState, useMemo } from "react";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { ArrowDown, ArrowUp } from "lucide-react";
@@ -54,8 +55,8 @@ export const PurchasersTable = ({ searchQuery, dateRange }: PurchasersTableProps
         name = `${firstName} ${lastName}`;
       }
       
-      // Randomize last purchase date in the last 90 days
-      const daysAgo = Math.floor(Math.random() * 90);
+      // Randomize last purchase date within the last 30 days
+      const daysAgo = Math.floor(Math.random() * 29) + 1; // 1 to 30 days ago
       const lastPurchase = new Date();
       lastPurchase.setDate(lastPurchase.getDate() - daysAgo);
       

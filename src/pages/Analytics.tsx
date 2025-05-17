@@ -7,11 +7,16 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { DateRangePicker } from "@/components/analytics/DateRangePicker";
 
 const Analytics = () => {
+  // Set default date range to last 30 days
+  const today = new Date();
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(today.getDate() - 30);
+  
   const [selectedMetric, setSelectedMetric] = useState("streams");
   const [dateRange, setDateRange] = useState({
-    from: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-    to: new Date(),
-    preset: "7days"
+    from: thirtyDaysAgo,
+    to: today,
+    preset: "30days"
   });
 
   return (

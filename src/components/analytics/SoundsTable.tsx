@@ -1,3 +1,4 @@
+
 import { useState, useMemo } from "react";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { format } from "date-fns";
@@ -59,8 +60,8 @@ export const SoundsTable = ({ searchQuery, dateRange }: SoundsTableProps) => {
     
     // Generate 50 sounds with varied data
     return Array.from({ length: 50 }, (_, i) => {
-      // Randomize release date in the last 2 years
-      const daysAgo = Math.floor(Math.random() * 730);
+      // Randomize release date within the last 30 days
+      const daysAgo = Math.floor(Math.random() * 29) + 1; // 1 to 30 days ago
       const releaseDate = new Date();
       releaseDate.setDate(releaseDate.getDate() - daysAgo);
       
