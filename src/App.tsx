@@ -6,8 +6,15 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Analytics from "./pages/Analytics";
 import NotFound from "./pages/NotFound";
 
-// Create a client
-const queryClient = new QueryClient();
+// Create a client with minimal configuration
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: false,
+    },
+  },
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
