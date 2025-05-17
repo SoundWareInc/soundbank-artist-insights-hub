@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 export interface DateRange {
   from: Date;
   to: Date;
-  preset: string; // Changed from optional to required
+  preset: string;
 }
 
 export interface AnalyticsDashboardProps {
