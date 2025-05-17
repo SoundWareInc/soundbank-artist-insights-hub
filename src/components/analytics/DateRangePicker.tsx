@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CalendarIcon } from "lucide-react";
+import { DateRange } from "@/lib/types";
 
 const presets = [
   { label: "Today", value: "today" },
@@ -28,12 +29,8 @@ const presets = [
 ];
 
 interface DateRangePickerProps {
-  dateRange: {
-    from: Date;
-    to: Date;
-    preset: string;
-  };
-  setDateRange: (dateRange: { from: Date; to: Date; preset: string }) => void;
+  dateRange: DateRange;
+  setDateRange: (dateRange: DateRange) => void;
 }
 
 export function DateRangePicker({ dateRange, setDateRange }: DateRangePickerProps) {
