@@ -81,11 +81,12 @@ export const ChartContainer = ({ selectedMetric, dateRange }: ChartContainerProp
     }
   };
 
-  const formatYAxisTick = (value: number) => {
+  // Updated formatter to ensure it always returns a string
+  const formatYAxisTick = (value: number): string => {
     if (value >= 1000) {
       return `${(value / 1000).toFixed(1)}k`;
     }
-    return value;
+    return value.toString(); // Explicitly convert to string
   };
 
   const getMetricDisplayName = (metric: string) => {
