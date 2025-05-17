@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from "react";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { format } from "date-fns";
@@ -32,63 +31,55 @@ export const SoundPacksTable = ({ searchQuery, dateRange }: SoundPacksTableProps
     direction: "descending",
   });
 
-  // Mock data
-  const mockSoundPacks: SoundPack[] = useMemo(() => [
-    {
-      id: "1",
-      name: "Bass Essentials",
-      releaseDate: new Date("2023-10-01"),
-      soundCount: 48,
-      streams: 124567,
-      likes: 8341,
-      purchases: 2567,
-    },
-    {
-      id: "2",
-      name: "Synthwave Collection",
-      releaseDate: new Date("2023-11-01"),
-      soundCount: 36,
-      streams: 98932,
-      likes: 6876,
-      purchases: 1412,
-    },
-    {
-      id: "3",
-      name: "Lofi Beats",
-      releaseDate: new Date("2023-09-01"),
-      soundCount: 64,
-      streams: 145678,
-      likes: 9210,
-      purchases: 3821,
-    },
-    {
-      id: "4",
-      name: "Acoustic Sessions",
-      releaseDate: new Date("2024-01-01"),
-      soundCount: 32,
-      streams: 78765,
-      likes: 5245,
-      purchases: 1298,
-    },
-    {
-      id: "5",
-      name: "Trap Essentials",
-      releaseDate: new Date("2023-12-01"),
-      soundCount: 56,
-      streams: 156789,
-      likes: 12321,
-      purchases: 4932,
-    },
-    {
-      id: "6",
-      name: "Cinematic Textures",
-      releaseDate: new Date("2023-08-01"),
-      soundCount: 42,
-      streams: 83456,
-      likes: 4765,
-      purchases: 1387,
-    },
-  ], []);
+  // Enhanced mock data with 50 entries
+  const mockSoundPacks: SoundPack[] = useMemo(() => {
+    // Sound pack name elements
+    const genres = ["Bass", "Trap", "Lofi", "Hip Hop", "Jazz", "R&B", "EDM", "Techno", "House", "Ambient", "Cinematic", "Pop", "Rock", "Acoustic", "Folk", "Synthwave", "Future", "Orchestral", "Experimental", "Funk"];
+    const descriptors = ["Essentials", "Collection", "Toolkit", "Elements", "Sessions", "Textures", "Fundamentals", "Masters", "Foundations", "Suite", "Series", "Box", "Library", "Archive", "Samples", "Loops", "Percussion", "Drums", "Melodies", "FX"];
+    
+    // Generate 50 sound packs with varied data
+    return Array.from({ length: 50 }, (_, i) => {
+      // Randomize release date in the last 3 years
+      const daysAgo = Math.floor(Math.random() * 1095);
+      const releaseDate = new Date();
+      releaseDate.setDate(releaseDate.getDate() - daysAgo);
+      
+      // Generate pack name
+      const genre = genres[Math.floor(Math.random() * genres.length)];
+      const descriptor = descriptors[Math.floor(Math.random() * descriptors.length)];
+      const name = `${genre} ${descriptor}`;
+      
+      // Generate number of sounds in the pack (between 8 and 128)
+      const soundCount = Math.floor(Math.random() * 120) + 8;
+      
+      // Calculate a base popularity factor (older packs may have had more time to accumulate metrics)
+      const ageFactor = Math.max(0.4, Math.min(1.5, (1095 - daysAgo) / 500));
+      const popularityBase = Math.random() * 0.7 + 0.3; // 0.3 to 1.0 base popularity
+      const popularity = popularityBase * ageFactor;
+      
+      // Generate metrics based on popularity and size of pack
+      const packSizeFactor = Math.sqrt(soundCount / 40); // Adjust metrics based on pack size
+      
+      const baseStreams = Math.floor((Math.random() * 400000 + 50000) * popularity * packSizeFactor);
+      const baseLikes = Math.floor((Math.random() * 30000 + 2000) * popularity * packSizeFactor);
+      const basePurchases = Math.floor((Math.random() * 8000 + 500) * popularity * packSizeFactor);
+      
+      // Add some randomness to each metric
+      const streams = Math.max(1000, Math.floor(baseStreams * (0.85 + Math.random() * 0.3)));
+      const likes = Math.max(100, Math.floor(baseLikes * (0.8 + Math.random() * 0.4)));
+      const purchases = Math.max(50, Math.floor(basePurchases * (0.75 + Math.random() * 0.5)));
+      
+      return {
+        id: (i + 1).toString(),
+        name,
+        releaseDate,
+        soundCount,
+        streams,
+        likes,
+        purchases,
+      };
+    });
+  }, []);
 
   const requestSort = (key: keyof SoundPack) => {
     let direction: "ascending" | "descending" = "ascending";

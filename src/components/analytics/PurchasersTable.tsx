@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from "react";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { ArrowDown, ArrowUp } from "lucide-react";
@@ -32,81 +31,58 @@ export const PurchasersTable = ({ searchQuery, dateRange }: PurchasersTableProps
     direction: "descending",
   });
 
-  // Mock data
-  const mockPurchasers: Purchaser[] = useMemo(() => [
-    {
-      id: "1",
-      name: "John Producer",
-      avatar: "",
-      streams: 3245,
-      likes: 567,
-      creditsPaid: 890,
-      lastPurchase: new Date("2023-12-28"),
-    },
-    {
-      id: "2",
-      name: "Sarah Beats",
-      avatar: "",
-      streams: 4567,
-      likes: 789,
-      creditsPaid: 1200,
-      lastPurchase: new Date("2024-01-15"),
-    },
-    {
-      id: "3",
-      name: "DJ MixMaster",
-      avatar: "",
-      streams: 6543,
-      likes: 1234,
-      creditsPaid: 2100,
-      lastPurchase: new Date("2024-02-02"),
-    },
-    {
-      id: "4",
-      name: "Alex Waveform",
-      avatar: "",
-      streams: 2345,
-      likes: 432,
-      creditsPaid: 560,
-      lastPurchase: new Date("2023-11-18"),
-    },
-    {
-      id: "5",
-      name: "Chris Harmonics",
-      avatar: "",
-      streams: 8765,
-      likes: 1876,
-      creditsPaid: 2800,
-      lastPurchase: new Date("2024-01-25"),
-    },
-    {
-      id: "6",
-      name: "Jamie Synth",
-      avatar: "",
-      streams: 5432,
-      likes: 986,
-      creditsPaid: 1500,
-      lastPurchase: new Date("2023-12-12"),
-    },
-    {
-      id: "7",
-      name: "Taylor Rhythm",
-      avatar: "",
-      streams: 3876,
-      likes: 765,
-      creditsPaid: 950,
-      lastPurchase: new Date("2024-01-05"),
-    },
-    {
-      id: "8",
-      name: "Morgan Beats",
-      avatar: "",
-      streams: 7654,
-      likes: 1654,
-      creditsPaid: 2400,
-      lastPurchase: new Date("2024-02-10"),
-    },
-  ], []);
+  // Enhanced mock data with 50 entries
+  const mockPurchasers: Purchaser[] = useMemo(() => {
+    // Name elements for realistic user names
+    const firstNames = ["James", "John", "Robert", "Michael", "William", "David", "Richard", "Joseph", "Thomas", "Emily", "Emma", "Olivia", "Ava", "Isabella", "Sophia", "Mia", "Charlotte", "Amelia", "Harper", "Evelyn", "Abigail", "DJ", "Producer", "Beat", "Mix", "Master"];
+    const lastNames = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez", "Hernandez", "Lopez", "Gonzalez", "Wilson", "Anderson", "Thomas", "Taylor", "Moore", "Jackson", "Martin", "Lee", "Perez", "Thompson", "White", "Harris", "Sanchez", "Clark", "Ramirez", "Lewis", "Robinson", "Walker", "Young", "Allen", "King", "Wright", "Scott", "Torres", "Nguyen", "Hill", "Flores", "Green", "Adams", "Nelson", "Baker", "Hall", "Rivera", "Campbell", "Mitchell", "Carter", "Roberts"];
+    const nicknames = ["Beat", "Mix", "Loops", "Audio", "Sound", "Music", "Flow", "Rhythm", "Wave", "Bass", "Drum", "Track", "Master", "Studio", "Pro", "Creator"];
+    
+    // Generate 50 purchasers with varied data
+    return Array.from({ length: 50 }, (_, i) => {
+      // Generate name
+      const useNickname = Math.random() > 0.7;
+      let name;
+      
+      if (useNickname) {
+        const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+        const nickname = nicknames[Math.floor(Math.random() * nicknames.length)];
+        name = `${firstName} "${nickname}"`;
+      } else {
+        const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+        const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+        name = `${firstName} ${lastName}`;
+      }
+      
+      // Randomize last purchase date in the last 90 days
+      const daysAgo = Math.floor(Math.random() * 90);
+      const lastPurchase = new Date();
+      lastPurchase.setDate(lastPurchase.getDate() - daysAgo);
+      
+      // Calculate engagement level (some users are much more engaged than others)
+      const engagementLevel = Math.pow(Math.random(), 1.5) * 0.7 + 0.3; // Skew towards higher engagement
+      
+      // Generate metrics based on engagement
+      const baseCredits = Math.floor((Math.random() * 8000 + 500) * engagementLevel);
+      // Users who spend more tend to stream and like more
+      const streamsPerCreditFactor = (Math.random() * 4) + 1; // How much they stream relative to spending
+      const likesPerCreditFactor = (Math.random() * 0.8) + 0.2; // How much they like relative to spending
+      
+      const creditsPaid = Math.max(50, Math.floor(baseCredits));
+      const streams = Math.max(100, Math.floor(creditsPaid * streamsPerCreditFactor));
+      const likes = Math.max(10, Math.floor(creditsPaid * likesPerCreditFactor));
+      
+      return {
+        id: (i + 1).toString(),
+        name,
+        avatar: "", // No avatar URLs for mock data
+        streams,
+        likes,
+        creditsPaid,
+        lastPurchase,
+      };
+    });
+  }, []);
 
   const requestSort = (key: keyof Purchaser) => {
     let direction: "ascending" | "descending" = "ascending";

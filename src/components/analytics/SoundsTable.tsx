@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from "react";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { format } from "date-fns";
@@ -33,81 +32,71 @@ export const SoundsTable = ({ searchQuery, dateRange }: SoundsTableProps) => {
     direction: "descending",
   });
 
-  // Mock data
-  const mockSounds: Sound[] = useMemo(() => [
-    {
-      id: "1",
-      name: "Deep Bass Drop",
-      soundPack: "Bass Essentials",
-      releaseDate: new Date("2023-10-15"),
-      streams: 34567,
-      likes: 2341,
-      purchases: 567,
-    },
-    {
-      id: "2",
-      name: "Analog Synth Lead",
-      soundPack: "Synthwave Collection",
-      releaseDate: new Date("2023-11-02"),
-      streams: 28932,
-      likes: 1876,
-      purchases: 412,
-    },
-    {
-      id: "3",
-      name: "Lofi Drum Kit",
-      soundPack: "Lofi Beats",
-      releaseDate: new Date("2023-09-21"),
-      streams: 45678,
-      likes: 3210,
-      purchases: 821,
-    },
-    {
-      id: "4",
-      name: "Acoustic Guitar Strum",
-      soundPack: "Acoustic Sessions",
-      releaseDate: new Date("2024-01-10"),
-      streams: 18765,
-      likes: 1245,
-      purchases: 298,
-    },
-    {
-      id: "5",
-      name: "808 Kick Pattern",
-      soundPack: "Trap Essentials",
-      releaseDate: new Date("2023-12-05"),
-      streams: 56789,
-      likes: 4321,
-      purchases: 932,
-    },
-    {
-      id: "6",
-      name: "Ambient Pad",
-      soundPack: "Cinematic Textures",
-      releaseDate: new Date("2023-08-28"),
-      streams: 23456,
-      likes: 1765,
-      purchases: 387,
-    },
-    {
-      id: "7",
-      name: "Electric Piano Loop",
-      soundPack: "Jazz Fundamentals",
-      releaseDate: new Date("2024-02-15"),
-      streams: 12345,
-      likes: 987,
-      purchases: 246,
-    },
-    {
-      id: "8",
-      name: "House Vocal Chop",
-      soundPack: "EDM Vocals",
-      releaseDate: new Date("2023-11-18"),
-      streams: 32109,
-      likes: 2134,
-      purchases: 532,
-    },
-  ], []);
+  // Enhanced mock data with 50 entries
+  const mockSounds: Sound[] = useMemo(() => {
+    // Sound name patterns
+    const prefixes = ["Deep", "Mellow", "Crisp", "Smooth", "Heavy", "Light", "Tech", "Urban", "Jazzy", "Raw", "Classic", "Neo", "Future", "Retro", "Ambient", "Dark", "Bright", "Funky", "Chill", "Upbeat"];
+    const types = ["Bass", "Kick", "Snare", "Hi-Hat", "Loop", "Sample", "Synth", "Pad", "Lead", "Drum", "Vocal", "FX", "Chord", "Melody", "Beat", "Arp", "Riser", "Drop", "Atmosphere", "Texture"];
+    
+    // Sound pack names
+    const packs = [
+      "Bass Essentials", 
+      "Synthwave Collection", 
+      "Lofi Beats", 
+      "Acoustic Sessions", 
+      "Trap Essentials", 
+      "Cinematic Textures",
+      "Jazz Fundamentals",
+      "EDM Vocals",
+      "Hip Hop Elements",
+      "R&B Essentials",
+      "Future Bass Kit",
+      "Analog Drums",
+      "Digital Textures",
+      "Indie Acoustics",
+      "Minimal Techno"
+    ];
+    
+    // Generate 50 sounds with varied data
+    return Array.from({ length: 50 }, (_, i) => {
+      // Randomize release date in the last 2 years
+      const daysAgo = Math.floor(Math.random() * 730);
+      const releaseDate = new Date();
+      releaseDate.setDate(releaseDate.getDate() - daysAgo);
+      
+      // Generate sound name
+      const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+      const type = types[Math.floor(Math.random() * types.length)];
+      const nameSuffix = Math.random() > 0.7 ? ` ${Math.floor(Math.random() * 9) + 1}` : "";
+      const name = `${prefix} ${type}${nameSuffix}`;
+      
+      // Assign to sound pack
+      const soundPack = packs[Math.floor(Math.random() * packs.length)];
+      
+      // Generate metrics - more popular sounds have higher metrics across all dimensions
+      const popularity = Math.random() * 0.8 + 0.2; // 0.2 to 1.0 popularity factor
+      
+      // Each metric has its own base scale, modified by the popularity factor
+      const baseStreams = Math.floor((Math.random() * 80000 + 5000) * popularity);
+      const baseLikes = Math.floor((Math.random() * 5000 + 200) * popularity);
+      const basePurchases = Math.floor((Math.random() * 800 + 50) * popularity);
+      
+      // Add some randomness to each metric
+      const streams = Math.max(10, Math.floor(baseStreams * (0.8 + Math.random() * 0.4)));
+      const likes = Math.max(5, Math.floor(baseLikes * (0.7 + Math.random() * 0.6)));
+      const purchases = Math.max(1, Math.floor(basePurchases * (0.6 + Math.random() * 0.8)));
+      
+      return {
+        id: (i + 1).toString(),
+        name,
+        soundPack,
+        releaseDate,
+        streams,
+        likes,
+        purchases,
+      };
+    });
+  }, []);
 
   const requestSort = (key: keyof Sound) => {
     let direction: "ascending" | "descending" = "ascending";
